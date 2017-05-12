@@ -12,7 +12,7 @@
         "issues": "https://github.com/ckfinder/ckfinder"
     },
     "require": {
-        "php": ">=7.0.0"
+        "php": ">=7.0.0",
         "unimatrix/backend": "~1.0",
         "league/flysystem-aws-s3-v2": "~1.0",
         "league/flysystem-azure": "~1.0",
