@@ -16,7 +16,6 @@ namespace CKSource\CKFinder\Backend;
 
 use CKSource\CKFinder\Acl\AclInterface;
 use CKSource\CKFinder\Backend\Adapter\Local as LocalFilesystemAdapter;
-use CKSource\CKFinder\Backend\Adapter\Dropbox as DropboxAdapter;
 use CKSource\CKFinder\CKFinder;
 use CKSource\CKFinder\Config;
 use CKSource\CKFinder\ContainerAwareInterface;
@@ -26,12 +25,7 @@ use League\Flysystem\AdapterInterface;
 use League\Flysystem\Cached\CachedAdapter;
 use League\Flysystem\Cached\CacheInterface;
 use League\Flysystem\Adapter\Ftp as FtpAdapter;
-use CKSource\CKFinder\Backend\Adapter\AwsS3 as AwsS3Adapter;
-use CKSource\CKFinder\Backend\Adapter\Azure as AzureAdapter;
-use Dropbox\Client as DropboxClient;
-use Aws\S3\S3Client;
 use League\Flysystem\Cached\Storage\Memory as MemoryCache;
-use WindowsAzure\Common\ServicesBuilder;
 
 /**
  * The BackendFactory class.
@@ -113,43 +107,6 @@ class BackendFactory
             $config = array_intersect_key($backendConfig, array_flip($configurable));
 
             return $this->createBackend($backendConfig, new FtpAdapter($config));
-        });
-
-        $this->registerAdapter('dropbox', function ($backendConfig) {
-
-            $client = new DropboxClient($backendConfig['token'], $backendConfig['username']);
-
-            return $this->createBackend($backendConfig, new DropboxAdapter($client, $backendConfig));
-        });
-
-        $this->registerAdapter('s3', function ($backendConfig) {
-            $clientConfig = array(
-                'key'    => $backendConfig['key'],
-                'secret' => $backendConfig['secret'],
-            );
-
-            if (isset($backendConfig['region'])) {
-                $clientConfig['region'] = $backendConfig['region'];
-            }
-
-            $client = S3Client::factory($clientConfig);
-
-            $filesystemConfig = array(
-                'visibility' => isset($backendConfig['visibility']) ? $backendConfig['visibility'] : 'private'
-            );
-
-            $prefix = isset($backendConfig['root']) ? trim($backendConfig['root'], '/ ') : null;
-
-            return $this->createBackend($backendConfig, new AwsS3Adapter($client, $backendConfig['bucket'], $prefix), $filesystemConfig);
-        });
-
-        $this->registerAdapter('azure', function ($backendConfig) {
-            $endpoint = sprintf('DefaultEndpointsProtocol=https;AccountName=%s;AccountKey=%s', $backendConfig['account'], $backendConfig['key']);
-            $blobRestProxy = ServicesBuilder::getInstance()->createBlobService($endpoint);
-
-            $prefix = isset($backendConfig['root']) ? trim($backendConfig['root'], '/ ') : null;
-
-            return $this->createBackend($backendConfig, new AzureAdapter($blobRestProxy, $backendConfig['container'], $prefix));
         });
     }
 

@@ -14,20 +14,20 @@
 
 namespace CKSource\CKFinder;
 
+use CKSource\CKFinder\Response\JsonResponse;
 use CKSource\CKFinder\Exception\CKFinderException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Debug;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use CKSource\CKFinder\Response\JsonResponse;
-use \Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * The exception handler class.
- * 
+ *
  * All errors are resolved here and passed to the response.
- * 
+ *
  * @copyright 2016 CKSource - Frederico Knabben
  */
 class ExceptionHandler implements EventSubscriberInterface
@@ -123,9 +123,9 @@ class ExceptionHandler implements EventSubscriberInterface
 
     /**
      * Returns all events and callbacks.
-     * 
+     *
      * @see <a href="http://api.symfony.com/2.5/Symfony/Component/EventDispatcher/EventSubscriberInterface.html">EventSubscriberInterface</a>
-     * 
+     *
      * @return array
      */
     public static function getSubscribedEvents()
