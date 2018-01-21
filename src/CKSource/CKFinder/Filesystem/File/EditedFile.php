@@ -64,7 +64,20 @@ class EditedFile extends ExistingFile
     public function __construct($fileName, CKFinder $app, $newFileName = null)
     {
         $this->workingFolder = $app['working_folder'];
-        $this->newFileName = $newFileName;
+
+        $config = $app['config'];
+
+        $fileName = static::secureName(
+            $fileName,
+            $config->get('disallowUnsafeCharacters'),
+            $config->get('forceAscii')
+        );
+
+        $this->newFileName = static::secureName(
+            $newFileName,
+            $config->get('disallowUnsafeCharacters'),
+            $config->get('forceAscii')
+        );
 
         parent::__construct($fileName, $this->workingFolder->getClientCurrentFolder(), $this->workingFolder->getResourceType(), $app);
     }

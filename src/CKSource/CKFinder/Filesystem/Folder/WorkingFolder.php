@@ -25,6 +25,7 @@ use CKSource\CKFinder\Exception\InvalidNameException;
 use CKSource\CKFinder\Exception\InvalidRequestException;
 use CKSource\CKFinder\Filesystem\File\File;
 use CKSource\CKFinder\Filesystem\Path;
+use CKSource\CKFinder\Operation\OperationManager;
 use CKSource\CKFinder\ResourceType\ResourceType;
 use CKSource\CKFinder\Response\JsonResponse;
 use CKSource\CKFinder\ResizedImage\ResizedImageRepository;
@@ -238,7 +239,7 @@ class WorkingFolder extends Folder implements EventSubscriberInterface
      *
      * @param string $dirname directory name
      *
-     * @return bool `true` if the folder was created successfully.
+     * @return array [string, bool] [0] Created folder name, [1] `true` if the folder was created successfully.
      *
      * @throws AccessDeniedException
      * @throws AlreadyExistsException
@@ -246,10 +247,16 @@ class WorkingFolder extends Folder implements EventSubscriberInterface
      */
     public function createDir($dirname)
     {
+        $config = $this->app['config'];
+
         $backend = $this->getBackend();
 
-        if (!Folder::isValidName($dirname, $this->app['config']->get('disallowUnsafeCharacters')) || $backend->isHiddenFolder($dirname)) {
+        if (!Folder::isValidName($dirname, $config->get('disallowUnsafeCharacters')) || $backend->isHiddenFolder($dirname)) {
             throw new InvalidNameException('Invalid folder name');
+        }
+
+        if ($config->get('forceAscii')) {
+            $dirname = File::convertToAscii($dirname);
         }
 
         $dirPath = Path::combine($this->getPath(), $dirname);
@@ -264,7 +271,7 @@ class WorkingFolder extends Folder implements EventSubscriberInterface
             throw new AccessDeniedException("Couldn't create new folder. Please check permissions.");
         }
 
-        return $result;
+        return array($dirname, $result);
     }
 
     /**
@@ -404,10 +411,16 @@ class WorkingFolder extends Folder implements EventSubscriberInterface
      */
     public function rename($newName)
     {
-        $disallowUnsafeCharacters  = $this->app['config']->get('disallowUnsafeCharacters');
+        $config = $this->app['config'];
+        $disallowUnsafeCharacters = $config->get('disallowUnsafeCharacters');
+        $forceAscii = $config->get('forceAscii');
 
         if (!Folder::isValidName($newName, $disallowUnsafeCharacters) || $this->backend->isHiddenFolder($newName)) {
             throw new InvalidNameException('Invalid folder name');
+        }
+
+        if ($forceAscii) {
+            $newName = File::convertToAscii($newName);
         }
 
         $newBackendPath = dirname($this->getPath()) . '/' . $newName;

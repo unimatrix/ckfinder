@@ -25,7 +25,7 @@ use League\Flysystem\AdapterInterface;
 use League\Flysystem\Cached\CachedAdapter;
 use League\Flysystem\Cached\CacheInterface;
 use League\Flysystem\Adapter\Ftp as FtpAdapter;
-use League\Flysystem\Cached\Storage\Memory as MemoryCache;
+use CKSource\CKFinder\Backend\Adapter\Cache\Storage\Memory as MemoryCache;
 
 /**
  * The BackendFactory class.
@@ -101,7 +101,6 @@ class BackendFactory
         });
 
         $this->registerAdapter('ftp', function ($backendConfig) {
-
             $configurable = array('host', 'port', 'username', 'password', 'ssl', 'timeout', 'root', 'permPrivate', 'permPublic', 'passive');
 
             $config = array_intersect_key($backendConfig, array_flip($configurable));

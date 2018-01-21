@@ -180,7 +180,15 @@ class Backend extends Filesystem
         }
 
         $directoryPath = $this->buildPath($resourceType, $path);
-        $contents = $this->listContents($directoryPath);
+
+        // It's possible that directory may not exist yet. This is the case when very first Init command
+        // is received, and resource type directories were not created yet. Some adapters will throw in
+        // this case, so handle this gracefully.
+        try {
+            $contents = $this->listContents($directoryPath);
+        } catch (\Exception $e) {
+            return false;
+        }
 
         foreach ($contents as $entry) {
             if ($entry['type'] === 'dir' &&
@@ -304,7 +312,12 @@ class Backend extends Filesystem
     {
         $pathParts = array_filter(explode('/', $directoryPath), 'strlen');
         $dirName = array_pop($pathParts);
-        $contents = $this->listContents(implode('/', $pathParts));
+
+        try {
+            $contents = $this->listContents(implode('/', $pathParts));
+        } catch (\Exception $e) {
+            return false;
+        }
 
         foreach ($contents as $c) {
             if (isset($c['type']) && isset($c['basename']) && $c['type'] === 'dir' && $c['basename'] === $dirName) {

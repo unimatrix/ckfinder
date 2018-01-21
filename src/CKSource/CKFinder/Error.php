@@ -16,7 +16,7 @@ namespace CKSource\CKFinder;
 
 /**
  * The Error class.
- * 
+ *
  * @copyright 2016 CKSource - Frederico Knabben
  */
 class Error

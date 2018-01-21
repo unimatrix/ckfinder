@@ -36,12 +36,13 @@ class CreateFolder extends CommandAbstract
         $dispatcher->dispatch(CKFinderEvent::CREATE_FOLDER, $createFolderEvent);
 
         $created = false;
+        $createdFolderName = null;
 
         if (!$createFolderEvent->isPropagationStopped()) {
             $newFolderName = $createFolderEvent->getNewFolderName();
-            $created = $workingFolder->createDir($newFolderName);
+            list($createdFolderName, $created) = $workingFolder->createDir($newFolderName);
         }
 
-        return array('newFolder' => $newFolderName, 'created' => (int) $created);
+        return array('newFolder' => $createdFolderName, 'created' => (int) $created);
     }
 }

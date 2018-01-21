@@ -183,7 +183,8 @@ class Config
             'debugLoggers'            => array('ckfinder_log', 'error_log', 'firephp'),
             'tempDirectory' => sys_get_temp_dir(),
             'sessionWriteClose' => true,
-            'csrfProtection' => true
+            'csrfProtection' => true,
+            'headers' => array()
         );
 
         $options = array_merge($defaults, $options);

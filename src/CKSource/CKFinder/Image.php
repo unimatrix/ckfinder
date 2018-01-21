@@ -77,6 +77,13 @@ class Image
     protected $dataSize;
 
     /**
+     * Quality of rescaled image.
+     *
+     * @var int
+     */
+    protected $resizeQuality;
+
+    /**
      * The factory method.
      *
      * @param string $data
@@ -530,6 +537,8 @@ class Image
      */
     public function resize($maxWidth, $maxHeight, $quality = 80, $useHigherFactor = false)
     {
+        $this->resizeQuality = $quality;
+
         $maxWidth = (int) $maxWidth ?: $this->width;
         $maxHeight = (int) $maxHeight ?: $this->height;
 
@@ -565,11 +574,12 @@ class Image
     /**
      * Returns image data.
      *
-     * @param string $format returned image format mimetype (current image mimetype is used if not set).
+     * @param string $format Returned image format mimetype (current image mimetype is used if not set).
+     * @param int $quality   Image quelity (used for JPG images only)
      *
      * @return string image data
      */
-    public function getData($format = null)
+    public function getData($format = null, $quality = 80)
     {
         $mime = $format ?: $this->mime;
 
@@ -582,7 +592,8 @@ class Image
             case 'image/jpeg':
             case 'image/bmp':
             case 'image/x-ms-bmp':
-                imagejpeg($this->gdImage);
+                $quality = $this->resizeQuality ?: $quality;
+                imagejpeg($this->gdImage, null, $quality);
                 break;
             case 'image/png':
                 imagealphablending($this->gdImage, false);

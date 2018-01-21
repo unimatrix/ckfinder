@@ -19,28 +19,28 @@ use CKSource\CKFinder\Filesystem\Path;
 
 /**
  * The Acl class.
- * 
+ *
  * @copyright 2016 CKSource - Frederico Knabben
  */
 class Acl implements AclInterface
 {
     /**
      * @brief The list of Access Control Lists entries.
-     * 
+     *
      * A list of array entries in the following form:
      * <pre>[folderPath][role][resourceType] => MaskBuilder</pre>
-     * 
+     *
      * @var array $entries
      */
     protected $rules = array();
 
     /**
      * @brief The role context interface.
-     * 
+     *
      * By default an instance of SessionRoleContext is used as a role context.
      * You can easily add a new class that implements RoleContextInterface to
      * better fit your application.
-     * 
+     *
      * @var RoleContextInterface $roleContext
      */
     protected $roleContext = null;
@@ -57,7 +57,7 @@ class Acl implements AclInterface
 
     /**
      * Constructor.
-     * 
+     *
      * @param RoleContextInterface $roleContext
      */
     public function __construct(RoleContextInterface $roleContext)
@@ -67,7 +67,7 @@ class Acl implements AclInterface
 
     /**
      * Sets rules for Access Control Lists using configuration nodes.
-     * 
+     *
      * It is assumed that Acl configuration nodes used here have the following form:
      *
      * @code
@@ -75,20 +75,20 @@ class Acl implements AclInterface
      *      'role'          => 'foo',
      *      'resourceType'  => 'Images',
      *      'folder'        => '/bar',
-     * 
+     *
      *      // Permissions
      *      'FOLDER_VIEW'   => true,
      *      'FOLDER_CREATE' => true,
      *      'FOLDER_RENAME' => true,
      *      'FOLDER_DELETE' => true,
-     * 
+     *
      *      'FILE_VIEW'     => true,
      *      'FILE_CREATE'   => true,
      *      'FILE_RENAME'   => true,
      *      'FILE_DELETE'   => true
      * )
      * @endcode
-     * 
+     *
      * If any permission is missing, it is inherited from the parent folder.
      *
      * @param array $aclConfigNodes Access Control Lists configuration nodes
@@ -240,12 +240,12 @@ class Acl implements AclInterface
 
     /**
      * Merges permission masks to allow permission inheritance from parent folders.
-     * 
+     *
      * @param int    $currentMask  the current mask numeric value
      * @param string $resourceType the resource type identifier
      * @param string $role         the user role name
      * @param string $folderPath   the folder path
-     * 
+     *
      * @return int computed mask numeric value
      */
     protected function mergePathComputedMask($currentMask, $resourceType, $role, $folderPath)

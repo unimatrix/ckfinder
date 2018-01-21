@@ -51,7 +51,11 @@ class RenamedFile extends ExistingFile
     {
         parent::__construct($fileName, $folder, $resourceType, $app);
 
-        $this->newFileName = static::secureName($newFileName, $this->config->get('disallowUnsafeCharacters'));
+        $this->newFileName = static::secureName(
+            $newFileName,
+            $this->config->get('disallowUnsafeCharacters'),
+            $this->config->get('forceAscii')
+        );
 
         if ($this->config->get('checkDoubleExtension')) {
             $this->newFileName = Utils::replaceDisallowedExtensions($this->newFileName, $resourceType);

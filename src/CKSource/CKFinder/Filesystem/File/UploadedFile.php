@@ -112,7 +112,10 @@ class UploadedFile extends File
      */
     public function sanitizeFilename()
     {
-        $this->fileName = static::secureName($this->fileName, $this->config->get('disallowUnsafeCharacters'));
+        $this->fileName = static::secureName($this->fileName,
+            $this->config->get('disallowUnsafeCharacters'),
+            $this->config->get('forceAscii')
+        );
 
         $resourceType = $this->workingFolder->getResourceType();
 
@@ -288,7 +291,7 @@ class UploadedFile extends File
     public function __destruct()
     {
         if (file_exists($this->tempFilePath)) {
-            @unlink($this->tempFilePath);
+            unlink($this->tempFilePath);
         }
     }
 }

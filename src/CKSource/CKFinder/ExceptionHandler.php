@@ -14,14 +14,14 @@
 
 namespace CKSource\CKFinder;
 
-use CKSource\CKFinder\Response\JsonResponse;
 use CKSource\CKFinder\Exception\CKFinderException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Debug;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use CKSource\CKFinder\Response\JsonResponse;
+use \Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * The exception handler class.
