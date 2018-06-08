@@ -1,2 +1,6 @@
-composer.lock
 /vendor
+.settings
+.buildpath
+.project
+.svn
+composer.lock
