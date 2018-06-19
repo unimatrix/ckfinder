@@ -44,7 +44,7 @@ class Config
      *                   the array.
      *
      * @param array|string $config
-     * @param \Cake\Http\ServerRequest $request
+     * @param object $request (Cake\Http\ServerRequest)
      *
      * @throws InvalidConfigException if config was not loaded properly.
      */

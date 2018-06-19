@@ -79,7 +79,7 @@ class CKFinder extends Container implements HttpKernelInterface
      *
      * @param array|string $config an array containing configuration options or a path
      *                             to the configuration file.
-     * @param \Cake\Http\ServerRequest $request
+     * @param object $request (Cake\Http\ServerRequest)
      *
      * @see config.php
      */
